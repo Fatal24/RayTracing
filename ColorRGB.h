@@ -14,24 +14,19 @@ class ColorRGB {
 private:
     Vector3 v;
     ColorRGB(Vector3 vec) : // Private constructor
-    v(vec),r(v.x),g(v.y),b(v.z) {}
+    v(vec) {}
     static int convertToByte(double value) { // Private method
         return 255 * std::max(static_cast<double>(0), std::ranges::min( static_cast<double>(1), value));}
 
     // RGB Colour components
 public :
-    const double r;
-    const double g;
-    const double b;
+    [[nodiscard]] double r() const {return v.x;}
+    [[nodiscard]] double g() const {return v.y;}
+    [[nodiscard]] double b() const {return v.z;}
 
-    ColorRGB(double uniform) : v(uniform), r(v.x), g(v.y), b(v.z) {    }
+    explicit ColorRGB(const double uniform) : v(uniform) {}
 
-    ColorRGB(double red, double green, double blue) {
-    v = new Vector3(red, green, blue);
-    r = v.x;
-    g = v.y;
-    b = v.z;
-}
+    ColorRGB(double red, double green, double blue) : v(red, green, blue) {}
 
     /*
      *  Add, subtract, scale, equals methods as in Vector3
@@ -55,14 +50,14 @@ public :
 
     [[nodiscard]] bool equals(ColorRGB other) const {return v.equals(other.v);}
 
-    [[nodiscard]] bool isZero() const {return (r==0 && g==0 && b==0);}
+    [[nodiscard]] bool isZero() const {return (r()==0 && g()==0 && b()==0);}
 
     /*
      * Conversion to RGB value
      */
 
     [[nodiscard]] int toRGB() const {
-    return convertToByte(r) << 16 | convertToByte(g) << 8 | convertToByte(b) << 0;}
+    return convertToByte(r()) << 16 | convertToByte(g()) << 8 | convertToByte(b()) << 0;}
 };
 
 #endif //RAYTRACING_COLORRGB_H

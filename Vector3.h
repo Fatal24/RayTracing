@@ -3,10 +3,8 @@
 #include <cmath>
 
 class Vector3 {
-private:
-	double x, y, z;
-
 public:
+	 double x, y, z;
 	 explicit Vector3(const double uniform):Vector3(uniform, uniform, uniform) {};
 
 	 Vector3(double x, double y, double z) : x(x), y(y), z(z) {}

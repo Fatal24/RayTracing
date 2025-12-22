@@ -5,6 +5,8 @@
 #ifndef RAYTRACING_RAYCASTHIT_H
 #define RAYTRACING_RAYCASTHIT_H
 #include "Vector3.h"
+#include <limits>
+#include "SceneObject.h"
 
 class RaycastHit {
 
@@ -22,7 +24,7 @@ private:
     Vector3 normal;
 
 public:
-    RaycastHit() {distance = POSITIVE_INFINITY;}
+    RaycastHit() : distance(std::numeric_limits<double>::infinity()), objectHit(nullptr), {}
 
     RaycastHit(SceneObject objectHit, double distance, Vector3 location, Vector3 normal) :
         distance(distance),objectHit(objectHit),location(location),normal(normal) {}

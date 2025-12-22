@@ -4,12 +4,11 @@
 
 #ifndef RAYTRACING_SCENEOBJECT_H
 #define RAYTRACING_SCENEOBJECT_H
+#include "ColorRGB.h"
 #include "Ray.h"
 #include "RaycastHit.h"
-
 class SceneObject {
-
-    // The diffuse colour of the object
+// The diffuse colour of the object
 protected:
     ColorRGB colour;
 
@@ -36,9 +35,9 @@ public:
     // Get normal to object at position
     virtual Vector3 getNormalAt(Vector3 position);
 
-    ColorRGB getColour() {return colour;}
+    [[nodiscard]] ColorRGB getColour() const {return colour;}
 
-    void setColour(ColorRGB colour) :colour(colour) {}
+    void setColour(const ColorRGB colour) {this->colour = colour;}
 
     [[nodiscard]] double getPhong_kD() const {return phong_kD;}
 
@@ -48,12 +47,12 @@ public:
 
     [[nodiscard]] double getReflectivity() const {return reflectivity;}
 
-    bool isTransmissive() {return !transmittance.isZero();}
+    [[nodiscard]] bool isTransmissive() const {return !transmittance.isZero();}
 
-    ColorRGB getTransmittance() { return transmittance; }
+    [[nodiscard]] ColorRGB getTransmittance() const { return transmittance; }
     [[nodiscard]] double getRefractiveIndex() const {return refractive_index;}
 
-    void setReflectivity(double reflectivity) : reflectivity(reflectivity) {}
+    void setReflectivity(double reflectivity) {this->reflectivity = reflectivity;}
 };
 
 
