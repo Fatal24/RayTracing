@@ -25,12 +25,9 @@ private:
         // The distance in world units between each screen-space pixel
         double x_step_m, y_step_m;
 
-
-
-
-
-    Camera(int width, int height) :
-        width_px(width),height_px(height),aspectRatio(static_cast<double>(width) / static_cast<double>(height)),
+public:
+    Camera(const int width, const int height) :
+        aspectRatio(static_cast<double>(width) / static_cast<double>(height)),width_px(width),height_px(height),
         width_m(tan(fov * M_PI/ 360)),height_m(width_m / aspectRatio),
         x_step_m(width_m/width_px),y_step_m(height_m/height_px) {}
 

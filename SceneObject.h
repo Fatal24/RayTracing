@@ -6,7 +6,7 @@
 #define RAYTRACING_SCENEOBJECT_H
 #include "ColorRGB.h"
 #include "Ray.h"
-#include "RaycastHit.h"
+class RaycastHit;
 class SceneObject {
 // The diffuse colour of the object
 protected:
@@ -23,21 +23,25 @@ protected:
     double refractive_index;
 
     SceneObject() :
-        colour(ColorRGB(1)),phong_kD(0),phong_kS(0),phong_alpha(0),reflectivity(0),transmittance(ColorRGB(0)),
+        colour(1),phong_kD(0),phong_kS(0),phong_alpha(0),reflectivity(0),transmittance(0),
         refractive_index(1.5) {}
+
+    SceneObject(const ColorRGB& colour, double phong_kD, double phong_kS, double phong_alpha, double reflectivity) :
+    colour(colour), phong_alpha(phong_alpha), phong_kD(phong_kD), phong_kS(phong_kS), reflectivity(reflectivity),
+    transmittance(0), refractive_index(1.5) {}
 
     // Intersect this object with ray
 public:
     virtual ~SceneObject() = default;
 
-    virtual RaycastHit intersectionWith(Ray ray);
+    virtual RaycastHit* intersectionWith(Ray ray);
 
     // Get normal to object at position
     virtual Vector3 getNormalAt(Vector3 position);
 
     [[nodiscard]] ColorRGB getColour() const {return colour;}
 
-    void setColour(const ColorRGB colour) {this->colour = colour;}
+    void setColour(const ColorRGB& colour) {this->colour = colour;}
 
     [[nodiscard]] double getPhong_kD() const {return phong_kD;}
 

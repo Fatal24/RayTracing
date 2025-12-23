@@ -16,4 +16,14 @@ add_executable(RayTracing main.cpp
         SceneObject.h
         ColorRGB.cpp
         ColorRGB.h
+        PointLight.cpp
+        PointLight.h
+        Plane.cpp
+        Plane.h
+        NullObject.cpp
+        NullObject.h
+        Renderer.cpp
+        Renderer.h
+        Scene.cpp
+        Scene.h
 )

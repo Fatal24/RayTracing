@@ -6,8 +6,11 @@
 #define RAYTRACING_RAYCASTHIT_H
 #include "Vector3.h"
 #include <limits>
-#include "SceneObject.h"
 
+#include "NullObject.h"
+#include "SceneObject.h"
+static auto NO_COLLISION_VEC = Vector3(std::numeric_limits<double>::infinity(),
+    std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
 class RaycastHit {
 
     // The distance the ray travelled before hitting an object
@@ -15,25 +18,26 @@ private:
     double distance;
 
     // The object that was hit by the ray
-    SceneObject objectHit;
+    const SceneObject objectHit;
 
     // The location that the ray hit the object
-    Vector3 location;
+    const Vector3 location;
 
     // The normal of the object at the location hit by the ray
-    Vector3 normal;
+    const Vector3 normal;
 
 public:
-    RaycastHit() : distance(std::numeric_limits<double>::infinity()), objectHit(nullptr), {}
+    RaycastHit() : distance(std::numeric_limits<double>::infinity()), objectHit(static_cast<SceneObject>(NullObject())),
+    location(NO_COLLISION_VEC), normal(NO_COLLISION_VEC) {}
 
-    RaycastHit(SceneObject objectHit, double distance, Vector3 location, Vector3 normal) :
+    RaycastHit(const SceneObject& objectHit, const double distance, const Vector3& location, const Vector3& normal) :
         distance(distance),objectHit(objectHit),location(location),normal(normal) {}
 
-    SceneObject getObjectHit() {return objectHit;}
+    [[nodiscard]] SceneObject getObjectHit() const {return objectHit;}
 
     [[nodiscard]] Vector3 getLocation() const {return location;}
 
-    [[nodiscard]] Vector3 getNormal() const {return normal;}
+    [[nodiscard]] Vector3 getNormal() const {return  normal;}
 
     [[nodiscard]] double getDistance() const {return distance;}
 };
