@@ -7,7 +7,7 @@ public:
 	 double x, y, z;
 	 explicit Vector3(const double uniform):Vector3(uniform, uniform, uniform) {};
 
-	 Vector3(double x, double y, double z) : x(x), y(y), z(z) {}
+	 Vector3(const double x, const double y, const double z) : x(x), y(y), z(z) {}
 
 	// Add two vectors together
 	 [[nodiscard]] Vector3 add(Vector3 other) const {return {x + other.x, y + other.y, z + other.z};}

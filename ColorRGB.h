@@ -7,6 +7,7 @@
 #include <algorithm>
 
 #include "Vector3.h"
+#include "SDL3/SDL_stdinc.h"
 
 class ColorRGB {
 
@@ -15,7 +16,7 @@ private:
     Vector3 v;
     ColorRGB(Vector3 vec) : // Private constructor
     v(vec) {}
-    static int convertToByte(double value) { // Private method
+    static Uint8 convertToByte(double value) { // Private method
         return 255 * std::max(static_cast<double>(0), std::ranges::min( static_cast<double>(1), value));}
 
     // RGB Colour components
@@ -24,6 +25,9 @@ public :
     [[nodiscard]] double g() const {return v.y;}
     [[nodiscard]] double b() const {return v.z;}
 
+    [[nodiscard]] int rAsByte() const {return convertToByte(r());}
+    [[nodiscard]] int gAsByte() const {return convertToByte(g());}
+    [[nodiscard]] int bAsByte() const {return convertToByte(b());}
     explicit ColorRGB(const double uniform) : v(uniform) {}
 
     ColorRGB(double red, double green, double blue) : v(red, green, blue) {}
@@ -56,7 +60,7 @@ public :
      * Conversion to RGB value
      */
 
-    [[nodiscard]] int toRGB() const {
+    [[nodiscard]] Uint32 toRGB() const {
     return convertToByte(r()) << 16 | convertToByte(g()) << 8 | convertToByte(b()) << 0;}
 };
 

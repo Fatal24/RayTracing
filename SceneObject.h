@@ -30,6 +30,10 @@ protected:
     colour(colour), phong_alpha(phong_alpha), phong_kD(phong_kD), phong_kS(phong_kS), reflectivity(reflectivity),
     transmittance(0), refractive_index(1.5) {}
 
+    SceneObject(const ColorRGB& colour, double phong_kD, double phong_kS, double phong_alpha, double reflectivity, double transmittance) :
+    colour(colour), phong_alpha(phong_alpha), phong_kD(phong_kD), phong_kS(phong_kS), reflectivity(reflectivity),
+    transmittance(transmittance), refractive_index(1.5) {}
+
     // Intersect this object with ray
 public:
     virtual ~SceneObject() = default;

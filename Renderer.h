@@ -13,6 +13,8 @@
 #include "Ray.h"
 #include "RaycastHit.h"
 #include "Scene.h"
+#include "Dev_SDL/include/SDL3/SDL_surface.h"
+#include "Dev_SDL/include/SDL3/SDL_pixels.h"
 
 class Renderer {
 
@@ -33,21 +35,23 @@ public:
 	Renderer(int width, int height, int bounces) : width(width), height(height), bounces(bounces) {}
 
 	// Render an image from the scene, with the camera at the origin
-	BufferedImage render(Scene scene) {
+	 SDL_Surface* render(const Scene& scene) {
 
 		// Set up image
-		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-
+	 	SDL_Surface* image = SDL_CreateSurface(width, height, SDL_PIXELFORMAT_RGB24);
 		// Set up camera
 		const Camera camera = {width, height};
-
+		Uint32 pixel_buffer[image->pitch * height];
 		// Loop over all pixels
 		for (int y = 0; y < height; ++y) {
 			for (int x = 0; x < width; ++x) {
 				Ray ray = camera.castRay(x, y); // Cast ray through pixel
 				ColorRGB linearRGB = trace(scene, ray, bounces); // Trace path of cast ray and determine colour
 				ColorRGB gammaRGB = tonemap(linearRGB);
-				image.setRGB(x, y, gammaRGB.toRGB()); // Set image colour to traced colour
+				pixel_buffer[x + image->pitch * y] = gammaRGB.toRGB();
+				//image->pixels[x+y*image->pitch] = gammaRGB.toRGB();
+				//SDL_MapRGB(SDL_GetPixelFormatDetails(image->format), nullptr,gammaRGB.rAsByte(),gammaRGB.gAsByte(),gammaRGB.bAsByte());
+				// Set image colour to traced colour
 			}
 			// Display progress every 10 lines
 			if(y%10==9||y==height-1) {
@@ -55,6 +59,9 @@ public:
 				std::cout << "% completed" << std::endl;
 			}
 		}
+		SDL_LockSurface(image);
+		SDL_memcpy(image->pixels, pixel_buffer, image->pitch * height * 4);
+		SDL_UnlockSurface(image);
 		return image;
 	}
 
@@ -108,7 +115,7 @@ protected:
 	 * Illuminate a surface on and object in the scene at a given position P and surface normal N,
 	 * relative to ray originating at O
 	 */
-	ColorRGB illuminate(Scene scene, SceneObject object, Vector3 P, Vector3 N, Vector3 O) {
+	[[nodiscard]] ColorRGB illuminate(Scene scene, const SceneObject& object, Vector3 P, Vector3 N, Vector3 O) const {
 
         Vector3 normal = N.normalised();
 		auto colourToReturn = ColorRGB(0);
